@@ -138,7 +138,7 @@ export class OidcSecurityValidation {
 
     // id_token C1: The Issuer Identifier for the OpenID Provider (which is typically obtained during Discovery) MUST exactly match the value of the iss (issuer) Claim.
     validate_id_token_iss(dataIdToken: any, authWellKnownEndpoints_issuer: any): boolean {
-        if (dataIdToken.iss !== authWellKnownEndpoints_issuer) {
+        if (dataIdToken.iss != authWellKnownEndpoints_issuer) {
             this.oidcSecurityCommon.logDebug('Validate_id_token_iss failed, dataIdToken.iss: ' + dataIdToken.iss + ' authWellKnownEndpoints issuer:' + authWellKnownEndpoints_issuer);
             return false;
         }
@@ -149,7 +149,7 @@ export class OidcSecurityValidation {
     // id_token C2: The Client MUST validate that the aud (audience) Claim contains its client_id value registered at the Issuer identified by the iss (issuer) Claim as an audience.
     // The ID Token MUST be rejected if the ID Token does not list the Client as a valid audience, or if it contains additional audiences not trusted by the Client.
     validate_id_token_aud(dataIdToken: any, aud: any): boolean {
-        if (dataIdToken.aud !== aud) {
+        if (dataIdToken.aud != aud) {
             this.oidcSecurityCommon.logDebug('Validate_id_token_aud failed, dataIdToken.aud: ' + dataIdToken.aud + ' client_id:' + aud);
             return false;
         }
@@ -158,7 +158,7 @@ export class OidcSecurityValidation {
     }
 
     validateStateFromHashCallback(state: any, local_state: any): boolean {
-        if (state !== local_state) {
+        if (state != local_state) {
             this.oidcSecurityCommon.logDebug('ValidateStateFromHashCallback failed, state: ' + state + ' local_state:' + local_state);
             return false;
         }
@@ -167,7 +167,7 @@ export class OidcSecurityValidation {
     }
 
     validate_userdata_sub_id_token(id_token_sub: any, userdata_sub: any): boolean {
-        if (id_token_sub !== userdata_sub) {
+        if (id_token_sub != userdata_sub) {
             this.oidcSecurityCommon.logDebug('validate_userdata_sub_id_token failed, id_token_sub: ' + id_token_sub + ' userdata_sub:' + userdata_sub);
             return false;
         }
@@ -253,7 +253,7 @@ export class OidcSecurityValidation {
         } else {
             // kid in the Jose header of id_token
             for (let key of jwtkeys.keys) {
-                if (key.kid === kid) {
+                if (key.kid == kid) {
                     let publickey = KEYUTIL.getKey(key);
                     isValid = KJUR.jws.JWS.verify(id_token, publickey, ['RS256']);
                     if (!isValid) {
@@ -299,7 +299,9 @@ export class OidcSecurityValidation {
         let first128bits = hash.substr(0, hash.length / 2);
         let testdata = hextob64u(first128bits);
 
-        if (testdata === at_hash) {
+        this.oidcSecurityCommon.logDebug(testdata);
+        this.oidcSecurityCommon.logDebug(at_hash);
+        if (testdata == at_hash) {
             return true; // isValid;
         }
 
